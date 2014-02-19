@@ -1,0 +1,1 @@
+module.exports = [{"isApi":true,"priority":1000.0001,"key":"Window","style":{backgroundColor:"white",exitOnClose:true,}},{"isApi":true,"priority":1000.0002,"key":"TextField","style":{bubbleParent:false,}}];
