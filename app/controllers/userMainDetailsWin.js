@@ -77,6 +77,31 @@ function resizeAndSaveProfilePictures(image)
 	$.img_user.width = Ti.UI.SIZE;
 }
 
+// Defining a function that sends the user's data to the server
+function signUp()
+{
+	var xhr = Ti.Network.createHTTPClient({
+		onload: function(e) {
+			var response = JSON.parse(this.responseText);
+			alert(response.rows);
+		},
+		onerror: function(e) {
+			alert('Check your internet connection.');
+		},
+	});
+	xhr.open("POST", Alloy.Globals.apiUrl + "insert/bofff/user_accounts");
+	var params = {
+		fullName: Alloy.Globals.globalUserSignUpData.name,
+		gender: Alloy.Globals.globalUserSignUpData.gender,
+		primary_mobile:	Alloy.Globals.globalUserSignUpData.phone,
+		primary_mail: Alloy.Globals.globalUserSignUpData.email,
+		profile_picture: Alloy.Globals.globalUserSignUpData.profilePicture.large ? Alloy.Globals.globalUserSignUpData.profilePicture.large.read() : null,
+		//profile_picture: $.img_user.image,
+	};
+	xhr.send(params);  // request is actually sent with this statement
+}
+
+
 // Adding facebookFinished function to be global function to get fired by facebook.js
 Ti.App.addEventListener('facebookFinished', facebookFinished);
 
@@ -195,7 +220,8 @@ function continueBtnPressed() {
 	if(validate_name() && validate_email() && checkGender()) {
 		
 		$.win.fireEvent('click');	// To blur keyboard
-		alert("Congratulations!\nYou've completed the FTR :D");
+		signUp();
+		alert("Continue");
 		
 		// // Go to the next window, complete your profile
 		// var editProfileWin = Alloy.createController("editProfileWin1").getView();

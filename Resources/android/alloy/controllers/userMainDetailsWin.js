@@ -47,6 +47,26 @@ function Controller() {
         $.img_user.height = 100;
         $.img_user.width = Ti.UI.SIZE;
     }
+    function signUp() {
+        var xhr = Ti.Network.createHTTPClient({
+            onload: function() {
+                var response = JSON.parse(this.responseText);
+                alert(response.rows);
+            },
+            onerror: function() {
+                alert("Check your internet connection.");
+            }
+        });
+        xhr.open("POST", Alloy.Globals.apiUrl + "insert/bofff/user_accounts");
+        var params = {
+            fullName: Alloy.Globals.globalUserSignUpData.name,
+            gender: Alloy.Globals.globalUserSignUpData.gender,
+            primary_mobile: Alloy.Globals.globalUserSignUpData.phone,
+            primary_mail: Alloy.Globals.globalUserSignUpData.email,
+            profile_picture: $.img_user.image
+        };
+        xhr.send(params);
+    }
     function facebookImgPressed() {
         Ti.include("/facebookFunctions.js");
         loginWithFacebook(requestWithGraphPath, getNameEmailPicture);
@@ -115,7 +135,8 @@ function Controller() {
     function continueBtnPressed() {
         if (validate_name() && validate_email() && checkGender()) {
             $.win.fireEvent("click");
-            alert("Congratulations!\nYou've completed the FTR :D");
+            signUp();
+            alert("Continue");
         }
     }
     require("alloy/controllers/BaseController").apply(this, Array.prototype.slice.call(arguments));
@@ -129,8 +150,8 @@ function Controller() {
     $.__views.win = Ti.UI.createWindow({
         backgroundColor: "white",
         exitOnClose: true,
-        id: "win",
-        title: "Enter Your Details"
+        title: "Bofff Me Setup",
+        id: "win"
     });
     $.__views.win && $.addTopLevelView($.__views.win);
     $.__views.__alloyId11 = Ti.UI.createScrollView({

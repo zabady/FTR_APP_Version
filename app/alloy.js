@@ -27,7 +27,7 @@ Alloy.Globals.globalUserSignUpData = new Object({
 	//name: 'temp',
 	name: 'Ahmed Atif', // for testing
 	//phone: 'temp',
-	phone: '+201009091995',	// for testing
+	phone: '201009091995',	// for testing
 	//email: 'temp',
 	email: 'ahmed.atif15@gamil.com', // for testing
 	profilePicture: new Object(),

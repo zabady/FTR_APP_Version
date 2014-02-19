@@ -1,5 +1,5 @@
 <Alloy>
-	<Window class="container" id="win" title="Enter Your Details">
+	<Window class="container" id="win">
 
 		<ScrollView layout="vertical" scrollingEnabled="false" >
 			

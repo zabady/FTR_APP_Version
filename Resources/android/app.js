@@ -6,7 +6,7 @@ Alloy.Globals.firstTimeRun = false;
 
 Alloy.Globals.globalUserSignUpData = new Object({
     name: "Ahmed Atif",
-    phone: "+201009091995",
+    phone: "201009091995",
     email: "ahmed.atif15@gamil.com",
     profilePicture: new Object(),
     gender: "temp"

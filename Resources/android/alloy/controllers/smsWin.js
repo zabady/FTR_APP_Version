@@ -63,11 +63,11 @@ function Controller() {
         keyboardType: Ti.UI.KEYBOARD_PHONE_PAD,
         borderStyle: Ti.UI.INPUT_BORDERSTYLE_ROUNDED,
         hintText: "Enter your code here",
-        textAlign: "center",
         color: "white",
         softKeyboardOnFocus: Ti.UI.Android.SOFT_KEYBOARD_SHOW_ON_FOCUS,
         top: "8%",
         height: Ti.UI.SIZE,
+        textAlign: "center",
         id: "txt_SMSCode"
     });
     $.__views.__alloyId8.add($.__views.txt_SMSCode);

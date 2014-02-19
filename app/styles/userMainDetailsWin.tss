@@ -1,4 +1,10 @@
 /////////////////////////////////////////////////////// Objects common styles
+"Window[platform=android]": {
+	title: "Bofff Me Setup",
+},
+"Window[platform=ios]": {
+	title: "Enter Your Details",
+},
 "ScrollView": {
 	height: Ti.UI.SIZE,
 	top: "10dp",
