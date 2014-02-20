@@ -1,5 +1,7 @@
 var Alloy = require("alloy"), _ = Alloy._, Backbone = Alloy.Backbone;
 
+Alloy.Globals.loading = Alloy.createWidget("nl.fokkezb.loading");
+
 Alloy.Globals.mainNav = new Object();
 
 Alloy.Globals.apiUrl = "http://www.bofffme.com/api/index.php/home/";
@@ -8,7 +10,7 @@ Alloy.Globals.firstTimeRun = false;
 
 Alloy.Globals.globalUserSignUpData = new Object({
     name: "Ahmed Atif",
-    phone: "+201009091995",
+    phone: "201009091995",
     email: "ahmed.atif15@gamil.com",
     profilePicture: new Object(),
     gender: "temp"

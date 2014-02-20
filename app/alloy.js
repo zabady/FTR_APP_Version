@@ -10,6 +10,8 @@
 //
 // Alloy.Globals.someGlobalFunction = function(){};
 
+// Defining a global loading variable to access loading widget
+Alloy.Globals.loading = Alloy.createWidget("nl.fokkezb.loading");
 
 // Defining the navigation bar for iOS
 if(OS_IOS) {

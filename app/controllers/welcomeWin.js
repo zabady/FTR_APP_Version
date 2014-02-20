@@ -12,5 +12,9 @@ function openPhoneNumberWin(e)
 	}
 }
 
+var file = Ti.Filesystem.getFile(Ti.Filesystem.applicationDataDirectory, 'userProfile_info');
+Alloy.Globals.globalUserSignUpData = file.read();
+alert(Alloy.Globals.globalUserSignUpData);
+
 $.win.navBarHidden = true;
 $.win.open(); 

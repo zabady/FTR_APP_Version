@@ -30,20 +30,18 @@ function Controller() {
         $.txt_name.value = Alloy.Globals.globalUserSignUpData.name;
         $.txt_email.value = Alloy.Globals.globalUserSignUpData.email;
         Alloy.Globals.globalUserSignUpData.gender ? $.img_gender_male.fireEvent("click") : $.img_gender_female.fireEvent("click");
-        $.img_user.image = Alloy.Globals.globalUserSignUpData.profilePicture.display.read();
+        $.img_user.image = Alloy.Globals.globalUserSignUpData.profilePicture.large.read();
+        $.img_user.height = 100;
         $.img_user.width = Ti.UI.SIZE;
     }
     function resizeAndSaveProfilePictures(image) {
         var resizedImage = image.imageAsResized(500, 500 * image.height / image.width);
         Alloy.Globals.globalUserSignUpData.profilePicture.large = Ti.Filesystem.getFile(Ti.Filesystem.applicationDataDirectory, "img_profile_pic_large.jpg");
         Alloy.Globals.globalUserSignUpData.profilePicture.large.write(resizedImage);
-        resizedImage = image.imageAsResized(100 * image.width / image.height, 100);
-        Alloy.Globals.globalUserSignUpData.profilePicture.display = Ti.Filesystem.getFile(Ti.Filesystem.applicationDataDirectory, "img_profile_pic_display.jpg");
-        Alloy.Globals.globalUserSignUpData.profilePicture.display.write(resizedImage);
         resizedImage = image.imageAsResized(50, 50);
         Alloy.Globals.globalUserSignUpData.profilePicture.icon = Ti.Filesystem.getFile(Ti.Filesystem.applicationDataDirectory, "img_profile_pic_icon.jpg");
         Alloy.Globals.globalUserSignUpData.profilePicture.icon.write(resizedImage);
-        $.img_user.image = Alloy.Globals.globalUserSignUpData.profilePicture.display.read();
+        $.img_user.image = Alloy.Globals.globalUserSignUpData.profilePicture.large.read();
         $.img_user.height = 100;
         $.img_user.width = Ti.UI.SIZE;
     }
@@ -115,7 +113,9 @@ function Controller() {
     function continueBtnPressed() {
         if (validate_name() && validate_email() && checkGender()) {
             $.win.fireEvent("click");
-            alert("Congratulations!\nYou've completed the FTR :D");
+            var file = Ti.Filesystem.getFile(Ti.Filesystem.applicationDataDirectory, "userProfile_info");
+            file.write();
+            Alloy.Globals.loading.show("Please Wait ..", false);
         }
     }
     require("alloy/controllers/BaseController").apply(this, Array.prototype.slice.call(arguments));
@@ -129,8 +129,8 @@ function Controller() {
     $.__views.win = Ti.UI.createWindow({
         backgroundColor: "white",
         exitOnClose: true,
-        id: "win",
-        title: "Enter Your Details"
+        title: "Enter Your Details",
+        id: "win"
     });
     $.__views.win && $.addTopLevelView($.__views.win);
     $.__views.__alloyId11 = Ti.UI.createScrollView({
@@ -165,6 +165,12 @@ function Controller() {
         id: "__alloyId13"
     });
     $.__views.__alloyId11.add($.__views.__alloyId13);
+    $.__views.__alloyId14 = Ti.UI.createView({
+        width: "200",
+        height: "100",
+        id: "__alloyId14"
+    });
+    $.__views.__alloyId11.add($.__views.__alloyId14);
     $.__views.img_user = Ti.UI.createImageView({
         top: "12dp",
         height: "100dp",
@@ -172,7 +178,7 @@ function Controller() {
         image: "/images/contact_photo.png",
         id: "img_user"
     });
-    $.__views.__alloyId11.add($.__views.img_user);
+    $.__views.__alloyId14.add($.__views.img_user);
     imgPressed ? $.__views.img_user.addEventListener("click", imgPressed) : __defers["$.__views.img_user!click!imgPressed"] = true;
     $.__views.txt_name = Ti.UI.createTextField({
         bubbleParent: false,
@@ -200,13 +206,13 @@ function Controller() {
         id: "txt_email"
     });
     $.__views.__alloyId11.add($.__views.txt_email);
-    $.__views.__alloyId14 = Ti.UI.createView({
+    $.__views.__alloyId15 = Ti.UI.createView({
         layout: "horizontal",
         height: Ti.UI.SIZE,
         width: Ti.UI.SIZE,
-        id: "__alloyId14"
+        id: "__alloyId15"
     });
-    $.__views.__alloyId11.add($.__views.__alloyId14);
+    $.__views.__alloyId11.add($.__views.__alloyId15);
     $.__views.lbl_gender_male = Ti.UI.createLabel({
         font: {
             fontSize: "17dp"
@@ -217,14 +223,14 @@ function Controller() {
         id: "lbl_gender_male",
         textAlign: "right"
     });
-    $.__views.__alloyId14.add($.__views.lbl_gender_male);
+    $.__views.__alloyId15.add($.__views.lbl_gender_male);
     $.__views.img_gender_male = Ti.UI.createImageView({
         image: "/images/gender_male[shaded].png",
         width: "75",
         height: "75",
         id: "img_gender_male"
     });
-    $.__views.__alloyId14.add($.__views.img_gender_male);
+    $.__views.__alloyId15.add($.__views.img_gender_male);
     genderSelected ? $.__views.img_gender_male.addEventListener("click", genderSelected) : __defers["$.__views.img_gender_male!click!genderSelected"] = true;
     $.__views.img_gender_female = Ti.UI.createImageView({
         image: "/images/gender_female[shaded].png",
@@ -232,7 +238,7 @@ function Controller() {
         height: "75",
         id: "img_gender_female"
     });
-    $.__views.__alloyId14.add($.__views.img_gender_female);
+    $.__views.__alloyId15.add($.__views.img_gender_female);
     genderSelected ? $.__views.img_gender_female.addEventListener("click", genderSelected) : __defers["$.__views.img_gender_female!click!genderSelected"] = true;
     $.__views.lbl_gender_female = Ti.UI.createLabel({
         font: {
@@ -244,8 +250,8 @@ function Controller() {
         id: "lbl_gender_female",
         textAlign: "left"
     });
-    $.__views.__alloyId14.add($.__views.lbl_gender_female);
-    $.__views.__alloyId15 = Ti.UI.createButton({
+    $.__views.__alloyId15.add($.__views.lbl_gender_female);
+    $.__views.__alloyId16 = Ti.UI.createButton({
         top: "10dp",
         borderRadius: 5,
         font: {
@@ -258,16 +264,16 @@ function Controller() {
         color: "white",
         bubbleParent: false,
         title: "Continue",
-        id: "__alloyId15"
+        id: "__alloyId16"
     });
-    $.__views.__alloyId11.add($.__views.__alloyId15);
-    continueBtnPressed ? $.__views.__alloyId15.addEventListener("click", continueBtnPressed) : __defers["$.__views.__alloyId15!click!continueBtnPressed"] = true;
-    var __alloyId17 = [];
-    __alloyId17.push("Open Camera");
-    __alloyId17.push("Choose from Library");
-    __alloyId17.push("Cancel");
+    $.__views.__alloyId11.add($.__views.__alloyId16);
+    continueBtnPressed ? $.__views.__alloyId16.addEventListener("click", continueBtnPressed) : __defers["$.__views.__alloyId16!click!continueBtnPressed"] = true;
+    var __alloyId18 = [];
+    __alloyId18.push("Open Camera");
+    __alloyId18.push("Choose from Library");
+    __alloyId18.push("Cancel");
     $.__views.optionDialog = Ti.UI.createOptionDialog({
-        options: __alloyId17,
+        options: __alloyId18,
         id: "optionDialog",
         cancel: "2"
     });
@@ -288,7 +294,7 @@ function Controller() {
     __defers["$.__views.txt_name!return!txtNameReturnKeyPressed"] && $.__views.txt_name.addEventListener("return", txtNameReturnKeyPressed);
     __defers["$.__views.img_gender_male!click!genderSelected"] && $.__views.img_gender_male.addEventListener("click", genderSelected);
     __defers["$.__views.img_gender_female!click!genderSelected"] && $.__views.img_gender_female.addEventListener("click", genderSelected);
-    __defers["$.__views.__alloyId15!click!continueBtnPressed"] && $.__views.__alloyId15.addEventListener("click", continueBtnPressed);
+    __defers["$.__views.__alloyId16!click!continueBtnPressed"] && $.__views.__alloyId16.addEventListener("click", continueBtnPressed);
     __defers["$.__views.optionDialog!click!optionDialogClick"] && $.__views.optionDialog.addEventListener("click", optionDialogClick);
     _.extend($, exports);
 }

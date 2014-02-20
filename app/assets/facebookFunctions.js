@@ -44,7 +44,6 @@ function getNameEmailPicture(objectsToChange) {
 	Alloy.Globals.globalUserSignUpData.email = facebookData.email;
 	Alloy.Globals.globalUserSignUpData.gender = facebookData.gender;
 	
-	getAndSaveFbProfilePic("https://graph.facebook.com/" + facebookData.id + "/picture?height=100&redirect=false", "display");
 	getAndSaveFbProfilePic("https://graph.facebook.com/" + facebookData.id + "/picture?type=square&redirect=false", "icon");
 	getAndSaveFbProfilePic("https://graph.facebook.com/" + facebookData.id + "/picture?width=500&redirect=false", "large");
 }
@@ -53,7 +52,7 @@ function getAndSaveFbProfilePic(profilePicUrl_data, imgType) {
 	// Create HTTP Client to get the profile picture data 
 	var client = Ti.Network.createHTTPClient({
 		onload : function(e) {
-			// We are going to save the three pictures, icon, display and large different resolutions
+			// We are going to save the two pictures, icon and large different resolutions
 			var profilePicUrl = JSON.parse(this.responseText).data.url; // Get the photo url
 			saveFbProfilePic(profilePicUrl, imgType);
 			Ti.API.info("Got one photo's data !");
@@ -75,15 +74,13 @@ function saveFbProfilePic(profilePicUrl, imgType) {
 			var image_file = Ti.Filesystem.getFile(Titanium.Filesystem.applicationDataDirectory, "img_profile_pic_" + imgType + ".jpg");
 			image_file.write(this.responseData); // Save the photo from responseDATA
 			
-			if (imgType == 'display') {
-				Alloy.Globals.globalUserSignUpData.profilePicture.display = image_file;
-				// Fire the event that will set the UI with facebook data
-				// It's put here because it will display the display image
-				Ti.App.fireEvent('facebookFinished');
-			} else if (imgType == 'icon') {
+			if (imgType == 'icon') {
 				Alloy.Globals.globalUserSignUpData.profilePicture.icon = image_file; 
 			} else if (imgType == 'large') {
 				Alloy.Globals.globalUserSignUpData.profilePicture.large = image_file;
+				// Fire the event that will set the UI with facebook data
+				// It's put here because it will display the large image
+				Ti.App.fireEvent('facebookFinished');
 			}
 			Ti.API.info(imgType + " saved");
 		},

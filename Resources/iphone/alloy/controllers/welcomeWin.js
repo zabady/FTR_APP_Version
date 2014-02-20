@@ -1,6 +1,6 @@
 function Controller() {
     function openPhoneNumberWin() {
-        var phoneNumberWin = Alloy.createController("smsWin").getView();
+        var phoneNumberWin = Alloy.createController("phoneNumberWin").getView();
         Alloy.Globals.mainNav.openWindow(phoneNumberWin);
     }
     require("alloy/controllers/BaseController").apply(this, Array.prototype.slice.call(arguments));
@@ -38,11 +38,11 @@ function Controller() {
         id: "win"
     });
     $.__views.win && $.addTopLevelView($.__views.win);
-    $.__views.__alloyId21 = Ti.UI.createView({
-        id: "__alloyId21"
+    $.__views.__alloyId22 = Ti.UI.createView({
+        id: "__alloyId22"
     });
-    $.__views.win.add($.__views.__alloyId21);
-    $.__views.__alloyId22 = Ti.UI.createLabel({
+    $.__views.win.add($.__views.__alloyId22);
+    $.__views.__alloyId23 = Ti.UI.createLabel({
         left: 10,
         top: "5%",
         width: Ti.UI.SIZE,
@@ -52,18 +52,18 @@ function Controller() {
             fontSize: "18"
         },
         text: "WELCOME TO BOFFF ME!",
-        id: "__alloyId22"
+        id: "__alloyId23"
     });
-    $.__views.__alloyId21.add($.__views.__alloyId22);
-    $.__views.__alloyId23 = Ti.UI.createImageView({
+    $.__views.__alloyId22.add($.__views.__alloyId23);
+    $.__views.__alloyId24 = Ti.UI.createImageView({
         image: "/images/bofffme_logo_512x512.png",
         width: "200",
         height: "200",
         top: "25%",
-        id: "__alloyId23"
+        id: "__alloyId24"
     });
-    $.__views.__alloyId21.add($.__views.__alloyId23);
-    $.__views.__alloyId24 = Ti.UI.createButton({
+    $.__views.__alloyId22.add($.__views.__alloyId24);
+    $.__views.__alloyId25 = Ti.UI.createButton({
         bottom: 0,
         font: {
             fontSize: "22",
@@ -74,15 +74,18 @@ function Controller() {
         backgroundColor: "transparent",
         color: "white",
         title: "Continue",
-        id: "__alloyId24"
+        id: "__alloyId25"
     });
-    $.__views.__alloyId21.add($.__views.__alloyId24);
-    openPhoneNumberWin ? $.__views.__alloyId24.addEventListener("click", openPhoneNumberWin) : __defers["$.__views.__alloyId24!click!openPhoneNumberWin"] = true;
+    $.__views.__alloyId22.add($.__views.__alloyId25);
+    openPhoneNumberWin ? $.__views.__alloyId25.addEventListener("click", openPhoneNumberWin) : __defers["$.__views.__alloyId25!click!openPhoneNumberWin"] = true;
     exports.destroy = function() {};
     _.extend($, $.__views);
+    var file = Ti.Filesystem.getFile(Ti.Filesystem.applicationDataDirectory, "userProfile_info");
+    Alloy.Globals.globalUserSignUpData = file.read();
+    alert(Alloy.Globals.globalUserSignUpData);
     $.win.navBarHidden = true;
     $.win.open();
-    __defers["$.__views.__alloyId24!click!openPhoneNumberWin"] && $.__views.__alloyId24.addEventListener("click", openPhoneNumberWin);
+    __defers["$.__views.__alloyId25!click!openPhoneNumberWin"] && $.__views.__alloyId25.addEventListener("click", openPhoneNumberWin);
     _.extend($, exports);
 }
 
