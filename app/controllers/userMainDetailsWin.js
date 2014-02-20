@@ -218,11 +218,11 @@ function continueBtnPressed() {
 	if(validate_name() && validate_email() && checkGender()) {
 		$.win.fireEvent('click');	// To blur keyboard
 		
-		// Save the global sign up data to a file
-		var file = Ti.Filesystem.getFile(Ti.Filesystem.applicationDataDirectory, 'userProfile_info');
-		file.write(); // TODO: Not finished
-		
 		Alloy.Globals.loading.show("Please Wait ..", false);
 		// signUp(); // TODO: For testing
+		
+		// Save the global sign up data to a file
+		var file = Ti.Filesystem.getFile(Ti.Filesystem.applicationDataDirectory, 'signUpData');
+		file.write(); // TODO: Not finished
 	}
 }

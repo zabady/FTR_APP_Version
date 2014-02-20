@@ -58,7 +58,11 @@ function Controller() {
     var __defers = {};
     $.__views.loadingMask = Ti.UI.createWindow({
         backgroundColor: "#5000",
+<<<<<<< HEAD
         exitOnClose: false,
+=======
+        exitOnClose: true,
+>>>>>>> a2f46447bcaed6cefc36160c0d5741abad20bf77
         backgroundImage: null,
         opacity: 1,
         navBarHidden: true,

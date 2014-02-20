@@ -45,6 +45,28 @@ function Controller() {
         $.img_user.height = 100;
         $.img_user.width = Ti.UI.SIZE;
     }
+    function signUp() {
+        var xhr = Ti.Network.createHTTPClient({
+            onload: function() {
+                Alloy.Globals.loading.hide();
+                var response = JSON.parse(this.responseText);
+                alert(response.rows);
+            },
+            onerror: function() {
+                Alloy.Globals.loading.hide();
+                alert("Check your internet connection.");
+            }
+        });
+        xhr.open("POST", Alloy.Globals.apiUrl + "insert/bofff/user_accounts");
+        var params = {
+            fullName: Alloy.Globals.globalUserSignUpData.name,
+            gender: Alloy.Globals.globalUserSignUpData.gender,
+            primary_mobile: Alloy.Globals.globalUserSignUpData.phone,
+            primary_email: Alloy.Globals.globalUserSignUpData.email,
+            profile_picture: Alloy.Globals.globalUserSignUpData.profilePicture.large ? Alloy.Globals.globalUserSignUpData.profilePicture.large.read() : null
+        };
+        xhr.send(params);
+    }
     function facebookImgPressed() {
         Ti.include("/facebookFunctions.js");
         loginWithFacebook(requestWithGraphPath, getNameEmailPicture);
@@ -113,9 +135,14 @@ function Controller() {
     function continueBtnPressed() {
         if (validate_name() && validate_email() && checkGender()) {
             $.win.fireEvent("click");
+<<<<<<< HEAD
             var file = Ti.Filesystem.getFile(Ti.Filesystem.applicationDataDirectory, "userProfile_info");
             file.write();
             Alloy.Globals.loading.show("Please Wait ..", false);
+=======
+            Alloy.Globals.loading.show("Please Wait ..", false);
+            signUp();
+>>>>>>> a2f46447bcaed6cefc36160c0d5741abad20bf77
         }
     }
     require("alloy/controllers/BaseController").apply(this, Array.prototype.slice.call(arguments));

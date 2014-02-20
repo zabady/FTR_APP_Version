@@ -28,8 +28,12 @@ module.exports = [ {
         backgroundImage: null,
         opacity: 1,
         navBarHidden: true,
+<<<<<<< HEAD
         modal: false,
         exitOnClose: false
+=======
+        modal: false
+>>>>>>> a2f46447bcaed6cefc36160c0d5741abad20bf77
     }
 }, {
     isClass: true,
