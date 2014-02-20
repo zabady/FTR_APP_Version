@@ -9,7 +9,7 @@
 			
 			<Label class="allStyles">OR</Label>
 			
-			<ImageView id="img_user" onClick="imgPressed" />
+			<View width="200" height="100"><ImageView id="img_user" onClick="imgPressed" /></View>
 			
 			<TextField id="txt_name" class="allStyles" onReturn="txtNameReturnKeyPressed"></TextField>
 			
@@ -23,7 +23,7 @@
 			</View>
 			
 			<Button onClick="continueBtnPressed">Continue</Button>
-		
+			
 		</ScrollView>
 		
 		<OptionDialog id="optionDialog" cancel="2" onClick="optionDialogClick">

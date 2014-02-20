@@ -24,7 +24,6 @@ function getNameEmailPicture() {
     Alloy.Globals.globalUserSignUpData.name = facebookData.name;
     Alloy.Globals.globalUserSignUpData.email = facebookData.email;
     Alloy.Globals.globalUserSignUpData.gender = facebookData.gender;
-    getAndSaveFbProfilePic("https://graph.facebook.com/" + facebookData.id + "/picture?height=100&redirect=false", "display");
     getAndSaveFbProfilePic("https://graph.facebook.com/" + facebookData.id + "/picture?type=square&redirect=false", "icon");
     getAndSaveFbProfilePic("https://graph.facebook.com/" + facebookData.id + "/picture?width=500&redirect=false", "large");
 }
@@ -51,10 +50,10 @@ function saveFbProfilePic(profilePicUrl, imgType) {
         onload: function() {
             var image_file = Ti.Filesystem.getFile(Titanium.Filesystem.applicationDataDirectory, "img_profile_pic_" + imgType + ".jpg");
             image_file.write(this.responseData);
-            if ("display" == imgType) {
-                Alloy.Globals.globalUserSignUpData.profilePicture.display = image_file;
+            if ("icon" == imgType) Alloy.Globals.globalUserSignUpData.profilePicture.icon = image_file; else if ("large" == imgType) {
+                Alloy.Globals.globalUserSignUpData.profilePicture.large = image_file;
                 Ti.App.fireEvent("facebookFinished");
-            } else "icon" == imgType ? Alloy.Globals.globalUserSignUpData.profilePicture.icon = image_file : "large" == imgType && (Alloy.Globals.globalUserSignUpData.profilePicture.large = image_file);
+            }
             Ti.API.info(imgType + " saved");
         },
         onerror: function(e) {

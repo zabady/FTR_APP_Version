@@ -51,8 +51,8 @@ function Controller() {
         top: "8%",
         height: Ti.UI.SIZE,
         textAlign: "center",
-        text: "Got your code ?",
-        id: "lbl_gotYourCode"
+        id: "lbl_gotYourCode",
+        text: "Got your code ?\nJust COPY it."
     });
     $.__views.__alloyId8.add($.__views.lbl_gotYourCode);
     $.__views.txt_SMSCode = Ti.UI.createTextField({
@@ -142,10 +142,15 @@ function Controller() {
             activityExitAnimation: Ti.Android.R.anim.slide_out_right
         });
     });
-    $.win.addEventListener("postlayout", function() {});
     Ti.UI.Clipboard.clearData();
     Ti.UI.Clipboard.clearText();
     Ti.App.addEventListener("resumed", function() {
+        if (Ti.UI.Clipboard.hasText() && Ti.UI.Clipboard.getText() == accessCode) {
+            $.txt_SMSCode.value = Ti.UI.Clipboard.getText();
+            $.txt_SMSCode.fireEvent("change");
+        }
+    });
+    $.win.addEventListener("focus", function() {
         if (Ti.UI.Clipboard.hasText() && Ti.UI.Clipboard.getText() == accessCode) {
             $.txt_SMSCode.value = Ti.UI.Clipboard.getText();
             $.txt_SMSCode.fireEvent("change");

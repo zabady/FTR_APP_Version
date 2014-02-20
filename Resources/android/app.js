@@ -1,5 +1,7 @@
 var Alloy = require("alloy"), _ = Alloy._, Backbone = Alloy.Backbone;
 
+Alloy.Globals.loading = Alloy.createWidget("nl.fokkezb.loading");
+
 Alloy.Globals.apiUrl = "http://www.bofffme.com/api/index.php/home/";
 
 Alloy.Globals.firstTimeRun = false;

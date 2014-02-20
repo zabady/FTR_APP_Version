@@ -1,5 +1,4 @@
-// TODO: Discussion about how many pictures for one user should we save ? 3
-// TODO: Discussion point: save cam photo or not ?
+// TODO: Discussion about how many pictures for one user should we save ? 2
 // TODO: Handling image rotation for camera
 // TODO: Handling image rotation for photoGallery
 
@@ -49,11 +48,12 @@ function facebookFinished() {
 	$.txt_name.value = Alloy.Globals.globalUserSignUpData.name;
 	$.txt_email.value = Alloy.Globals.globalUserSignUpData.email;
 	Alloy.Globals.globalUserSignUpData.gender ? $.img_gender_male.fireEvent('click') : $.img_gender_female.fireEvent('click');
-	$.img_user.image = Alloy.Globals.globalUserSignUpData.profilePicture.display.read();
+	$.img_user.image = Alloy.Globals.globalUserSignUpData.profilePicture.large.read();
+	$.img_user.height = 100;
 	$.img_user.width = Ti.UI.SIZE;
 }
 
-// Defining a function that resize the profile pic to display, icon and large then saves them on appDataDirectory
+// Defining a function that resize the profile pic to icon and large then saves them on appDataDirectory
 function resizeAndSaveProfilePictures(image)
 {
 	var resizedImage = image.imageAsResized(500, image.height * 500 / image.width);
@@ -61,18 +61,13 @@ function resizeAndSaveProfilePictures(image)
 		Ti.Filesystem.getFile(Ti.Filesystem.applicationDataDirectory, 'img_profile_pic_large.jpg');
 	Alloy.Globals.globalUserSignUpData.profilePicture.large.write(resizedImage);
 	
-	resizedImage = image.imageAsResized(100 * image.width / image.height, 100);
-	Alloy.Globals.globalUserSignUpData.profilePicture.display = 
-		Ti.Filesystem.getFile(Ti.Filesystem.applicationDataDirectory, 'img_profile_pic_display.jpg');
-	Alloy.Globals.globalUserSignUpData.profilePicture.display.write(resizedImage);
-	
 	resizedImage = image.imageAsResized(50, 50);
 	Alloy.Globals.globalUserSignUpData.profilePicture.icon = 
 		Ti.Filesystem.getFile(Ti.Filesystem.applicationDataDirectory, 'img_profile_pic_icon.jpg');
 	Alloy.Globals.globalUserSignUpData.profilePicture.icon.write(resizedImage);
 	
-	// Read and load the displayImage to the imageView
-	$.img_user.image = Alloy.Globals.globalUserSignUpData.profilePicture.display.read();
+	// Read and load the largeImage to the imageView
+	$.img_user.image = Alloy.Globals.globalUserSignUpData.profilePicture.large.read();
 	$.img_user.height = 100;
 	$.img_user.width = Ti.UI.SIZE;
 }
@@ -82,10 +77,15 @@ function signUp()
 {
 	var xhr = Ti.Network.createHTTPClient({
 		onload: function(e) {
+			Alloy.Globals.loading.hide();
 			var response = JSON.parse(this.responseText);
+			//this returns the pin of the user you should convert it to md5
 			alert(response.rows);
+			//this is to convert the pin to md5 to be able to search with it in the DB you should save it alloy.globals
+			//var pinInMd5=Titanium.Utils.md5HexDigest(response.rows);
 		},
 		onerror: function(e) {
+			Alloy.Globals.loading.hide();
 			alert('Check your internet connection.');
 		},
 	});
@@ -94,11 +94,10 @@ function signUp()
 		fullName: Alloy.Globals.globalUserSignUpData.name,
 		gender: Alloy.Globals.globalUserSignUpData.gender,
 		primary_mobile:	Alloy.Globals.globalUserSignUpData.phone,
-		primary_mail: Alloy.Globals.globalUserSignUpData.email,
+		primary_email: Alloy.Globals.globalUserSignUpData.email,
 		profile_picture: Alloy.Globals.globalUserSignUpData.profilePicture.large ? Alloy.Globals.globalUserSignUpData.profilePicture.large.read() : null,
-		//profile_picture: $.img_user.image,
 	};
-	xhr.send(params);  // request is actually sent with this statement
+	xhr.send(params); // request is actually sent with this statement
 }
 
 
@@ -216,19 +215,14 @@ function genderSelected(e) {
 
 // Defining a function for pressing on Continue button
 function continueBtnPressed() {
-	
 	if(validate_name() && validate_email() && checkGender()) {
-		
 		$.win.fireEvent('click');	// To blur keyboard
-		signUp();
-		alert("Continue");
 		
-		// // Go to the next window, complete your profile
-		// var editProfileWin = Alloy.createController("editProfileWin1").getView();
-	 	// if(OS_IOS) {
-			// Alloy.Globals.mainNav.openWindow(editProfileWin);
-		// } else {
-			// editProfileWin.open({ activityEnterAnimation: Ti.Android.R.anim.slide_in_left });
-		// }
+		// Save the global sign up data to a file
+		var file = Ti.Filesystem.getFile(Ti.Filesystem.applicationDataDirectory, 'signUpData');
+		file.write(); // TODO: Not finished
+		
+		Alloy.Globals.loading.show("Please Wait ..", false);
+		signUp(); // TODO: For testing
 	}
 }
