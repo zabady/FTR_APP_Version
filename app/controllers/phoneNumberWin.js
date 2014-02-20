@@ -53,7 +53,7 @@ function changeCountryAndCountryCode() {
 function continueBtnPressed(e) {
 	var phoneNumberRegex = /^[0-9]{9,15}$/;
 	if ($.txt_phoneNumber.value.match(phoneNumberRegex)) {
-		$.txt_phoneNumber.blur(); // TODO: Handle bluring keyboard before navigation in free time
+		$.txt_phoneNumber.blur();
 		
 		$.dialog_confirm.message = "Do do you confirm that this is your number: +" + allCountries[currentCountryCode].phoneCode 
 			+ parseInt($.txt_phoneNumber.value, 10) + "\nAn SMS with your access code will be sent to this number.";
@@ -72,7 +72,7 @@ function dialogConfirmPressed(e){
 	} else {
 		
 		// Save the user's phone number in the global data variable
-		Alloy.Globals.globalUserSignUpData.phone = allCountries[currentCountryCode].phoneCode 
+		Alloy.Globals.userSignUpData.phone = allCountries[currentCountryCode].phoneCode 
 			+ parseInt($.txt_phoneNumber.value, 10);
 		
 		// Navigate to SMS Code confirmation

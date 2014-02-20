@@ -40,9 +40,11 @@ function requestWithGraphPath(nextFunctionData) {
 }
 
 function getNameEmailPicture(objectsToChange) {
-	Alloy.Globals.globalUserSignUpData.name = facebookData.name;
-	Alloy.Globals.globalUserSignUpData.email = facebookData.email;
-	Alloy.Globals.globalUserSignUpData.gender = facebookData.gender;
+	Alloy.Globals.loading.show('Please Wait ..', false); // Showing Loading View
+	
+	Alloy.Globals.userSignUpData.name = facebookData.name;
+	Alloy.Globals.userSignUpData.email = facebookData.email;
+	Alloy.Globals.userSignUpData.gender = facebookData.gender;
 	
 	getAndSaveFbProfilePic("https://graph.facebook.com/" + facebookData.id + "/picture?type=square&redirect=false", "icon");
 	getAndSaveFbProfilePic("https://graph.facebook.com/" + facebookData.id + "/picture?width=500&redirect=false", "large");
@@ -75,17 +77,18 @@ function saveFbProfilePic(profilePicUrl, imgType) {
 			image_file.write(this.responseData); // Save the photo from responseDATA
 			
 			if (imgType == 'icon') {
-				Alloy.Globals.globalUserSignUpData.profilePicture.icon = image_file; 
+				Alloy.Globals.userSignUpData.profilePicture.icon = image_file; 
 			} else if (imgType == 'large') {
-				Alloy.Globals.globalUserSignUpData.profilePicture.large = image_file;
+				Alloy.Globals.userSignUpData.profilePicture.large = image_file;
 				// Fire the event that will set the UI with facebook data
 				// It's put here because it will display the large image
 				Ti.App.fireEvent('facebookFinished');
+				Alloy.Globals.loading.hide(); // Hide Loading View
 			}
 			Ti.API.info(imgType + " saved");
 		},
 		onerror : function(e) {
-			Ti.API.debug(e.error);
+			Alloy.Globals.loading.hide(); // Hide Loading View
 			alert(e.error);
 		},
 		timeout: 10000

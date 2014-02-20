@@ -132,7 +132,7 @@ function Controller() {
     });
     xhr.open("POST", Alloy.Globals.apiUrl + "send_code_msg");
     ({
-        mobile: Alloy.Globals.globalUserSignUpData.phone
+        mobile: Alloy.Globals.userSignUpData.phone
     });
     $.win.addEventListener("click", function() {
         $.txt_SMSCode.blur();

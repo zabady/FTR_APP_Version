@@ -41,16 +41,16 @@
 
 /////////////////////////////////////////////////////// Specific Styles
 	"#img_facebook": {
-		top: "10dp",
-		bottom: "12dp",
-		height: "40dp",
-		width: "200dp",
+		top: "10",
+		bottom: "12",
+		height: "40",
+		width: "200",
 		image: "/images/facebook_btn.png",
 	},
 	"#img_user": {
-		top: "12dp",
-		height :"100dp",
-		width: "100dp",
+		top: "12",
+		height :"100",
+		width: "100",
 	    image: "/images/contact_photo.png",
 	},
 	"#txt_name": {

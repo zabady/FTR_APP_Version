@@ -39,9 +39,9 @@ function Controller() {
         Alloy.Globals.globalUserSignUpData.profilePicture.large = Ti.Filesystem.getFile(Ti.Filesystem.applicationDataDirectory, "img_profile_pic_large.jpg");
         Alloy.Globals.globalUserSignUpData.profilePicture.large.write(resizedImage);
         resizedImage = image.imageAsResized(50, 50);
-        Alloy.Globals.globalUserSignUpData.profilePicture.icon = Ti.Filesystem.getFile(Ti.Filesystem.applicationDataDirectory, "img_profile_pic_icon.jpg");
-        Alloy.Globals.globalUserSignUpData.profilePicture.icon.write(resizedImage);
-        $.img_user.image = Alloy.Globals.globalUserSignUpData.profilePicture.large.read();
+        Alloy.Globals.userSignUpData.profilePicture.icon = Ti.Filesystem.getFile(Ti.Filesystem.applicationDataDirectory, "img_profile_pic_icon.jpg");
+        Alloy.Globals.userSignUpData.profilePicture.icon.write(resizedImage);
+        $.img_user.image = Alloy.Globals.userSignUpData.profilePicture.large.read();
         $.img_user.height = 100;
         $.img_user.width = Ti.UI.SIZE;
     }
@@ -49,8 +49,8 @@ function Controller() {
         var xhr = Ti.Network.createHTTPClient({
             onload: function() {
                 Alloy.Globals.loading.hide();
-                var response = JSON.parse(this.responseText);
-                alert(response.rows);
+                var response = JSON.parse("User's Pin:\n" + this.responseText);
+                Alloy.Globals.userSignUpData.pin = Titanium.Utils.md5HexDigest(response.rows);
             },
             onerror: function() {
                 Alloy.Globals.loading.hide();
@@ -59,11 +59,11 @@ function Controller() {
         });
         xhr.open("POST", Alloy.Globals.apiUrl + "insert/bofff/user_accounts");
         var params = {
-            fullName: Alloy.Globals.globalUserSignUpData.name,
-            gender: Alloy.Globals.globalUserSignUpData.gender,
-            primary_mobile: Alloy.Globals.globalUserSignUpData.phone,
-            primary_email: Alloy.Globals.globalUserSignUpData.email,
-            profile_picture: Alloy.Globals.globalUserSignUpData.profilePicture.large ? Alloy.Globals.globalUserSignUpData.profilePicture.large.read() : null
+            fullName: Alloy.Globals.userSignUpData.name,
+            gender: Alloy.Globals.userSignUpData.gender,
+            primary_mobile: Alloy.Globals.userSignUpData.phone,
+            primary_email: Alloy.Globals.userSignUpData.email,
+            profile_picture: Alloy.Globals.userSignUpData.profilePicture.large ? Alloy.Globals.userSignUpData.profilePicture.large.read() : null
         };
         xhr.send(params);
     }
@@ -117,7 +117,7 @@ function Controller() {
             $.lbl_gender_female.color = "gray";
             $.img_gender_male.image = "/images/gender_male.png";
             $.img_gender_female.image = "/images/gender_female[shaded].png";
-            Alloy.Globals.globalUserSignUpData.gender = "male";
+            Alloy.Globals.userSignUpData.gender = "male";
         } else {
             $.lbl_gender_male.font = {
                 fontSize: "17"
@@ -129,20 +129,14 @@ function Controller() {
             $.img_gender_female.image = "/images/gender_female.png";
             $.lbl_gender_male.color = "gray";
             $.lbl_gender_female.color = "#2279bc";
-            Alloy.Globals.globalUserSignUpData.gender = "female";
+            Alloy.Globals.userSignUpData.gender = "female";
         }
     }
     function continueBtnPressed() {
         if (validate_name() && validate_email() && checkGender()) {
             $.win.fireEvent("click");
-<<<<<<< HEAD
-            var file = Ti.Filesystem.getFile(Ti.Filesystem.applicationDataDirectory, "userProfile_info");
-            file.write();
-            Alloy.Globals.loading.show("Please Wait ..", false);
-=======
             Alloy.Globals.loading.show("Please Wait ..", false);
             signUp();
->>>>>>> a2f46447bcaed6cefc36160c0d5741abad20bf77
         }
     }
     require("alloy/controllers/BaseController").apply(this, Array.prototype.slice.call(arguments));
@@ -169,10 +163,10 @@ function Controller() {
     });
     $.__views.win.add($.__views.__alloyId11);
     $.__views.img_facebook = Ti.UI.createImageView({
-        top: "10dp",
-        bottom: "12dp",
-        height: "40dp",
-        width: "200dp",
+        top: "10",
+        bottom: "12",
+        height: "40",
+        width: "200",
         image: "/images/facebook_btn.png",
         id: "img_facebook"
     });
@@ -199,9 +193,9 @@ function Controller() {
     });
     $.__views.__alloyId11.add($.__views.__alloyId14);
     $.__views.img_user = Ti.UI.createImageView({
-        top: "12dp",
-        height: "100dp",
-        width: "100dp",
+        top: "12",
+        height: "100",
+        width: "100",
         image: "/images/contact_photo.png",
         id: "img_user"
     });

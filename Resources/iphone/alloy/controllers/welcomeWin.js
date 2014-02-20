@@ -80,9 +80,6 @@ function Controller() {
     openPhoneNumberWin ? $.__views.__alloyId25.addEventListener("click", openPhoneNumberWin) : __defers["$.__views.__alloyId25!click!openPhoneNumberWin"] = true;
     exports.destroy = function() {};
     _.extend($, $.__views);
-    var file = Ti.Filesystem.getFile(Ti.Filesystem.applicationDataDirectory, "userProfile_info");
-    Alloy.Globals.globalUserSignUpData = file.read();
-    alert(Alloy.Globals.globalUserSignUpData);
     $.win.navBarHidden = true;
     $.win.open();
     __defers["$.__views.__alloyId25!click!openPhoneNumberWin"] && $.__views.__alloyId25.addEventListener("click", openPhoneNumberWin);

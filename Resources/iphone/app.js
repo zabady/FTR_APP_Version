@@ -1,5 +1,12 @@
 var Alloy = require("alloy"), _ = Alloy._, Backbone = Alloy.Backbone;
 
+Ti.Network.online || Ti.UI.createAlertDialog({
+    title: "No Internet Connection",
+    message: "Please connect to the internet and restart the app.",
+    cancel: 0,
+    buttonNames: [ "Ok" ]
+}).show();
+
 Alloy.Globals.loading = Alloy.createWidget("nl.fokkezb.loading");
 
 Alloy.Globals.mainNav = new Object();
@@ -8,12 +15,13 @@ Alloy.Globals.apiUrl = "http://www.bofffme.com/api/index.php/home/";
 
 Alloy.Globals.firstTimeRun = false;
 
-Alloy.Globals.globalUserSignUpData = new Object({
-    name: "Ahmed Atif",
-    phone: "201009091995",
-    email: "ahmed.atif15@gamil.com",
-    profilePicture: new Object(),
-    gender: "temp"
+Alloy.Globals.userSignUpData = new Object({
+    pin: "temp",
+    name: "temp",
+    phone: "temp",
+    email: "temp",
+    gender: "temp",
+    profilePicture: new Object()
 });
 
 var xhr = Ti.Network.createHTTPClient({
@@ -22,12 +30,7 @@ var xhr = Ti.Network.createHTTPClient({
         Alloy.Globals.countryCode = response[0].cc.toLowerCase();
     },
     onerror: function() {
-        Ti.UI.createAlertDialog({
-            title: "Error",
-            message: "Check your internet connection.",
-            cancel: 0,
-            buttonNames: [ "Ok" ]
-        }).show();
+        alert("No Interner Connection.");
     }
 });
 

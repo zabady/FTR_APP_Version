@@ -4,7 +4,6 @@ var accessCode = "0000";	// TODO: Used for testing and must be removed on the re
 var xhr = Ti.Network.createHTTPClient({
 	onload: function(e) {
 		var response = JSON.parse(this.responseText);
-		alert(response.rows); // TODO: used for testing and must be removed on the real app
 		accessCode = response.rows;
 	},
 	onerror: function(e) {
@@ -20,10 +19,10 @@ xhr.open("POST", Alloy.Globals.apiUrl + "send_code_msg");
 
 // Create the msg parameters that will be sent to the server
 var msgParams = {
-	mobile: Alloy.Globals.globalUserSignUpData.phone,
+	mobile: Alloy.Globals.userSignUpData.phone,
 };
 // Send the request to the server
-// xhr.send(msgParams);
+xhr.send(msgParams); // TODO: For testing
 
 
 /////////////////////////////////////////////////////////////////////////// HANDLING UI AND EVENT LISTENERS FUNCTIONS

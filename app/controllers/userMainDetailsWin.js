@@ -1,4 +1,3 @@
-// TODO: Discussion about how many pictures for one user should we save ? 2
 // TODO: Handling image rotation for camera
 // TODO: Handling image rotation for photoGallery
 
@@ -62,12 +61,12 @@ function resizeAndSaveProfilePictures(image)
 	Alloy.Globals.globalUserSignUpData.profilePicture.large.write(resizedImage);
 	
 	resizedImage = image.imageAsResized(50, 50);
-	Alloy.Globals.globalUserSignUpData.profilePicture.icon = 
+	Alloy.Globals.userSignUpData.profilePicture.icon = 
 		Ti.Filesystem.getFile(Ti.Filesystem.applicationDataDirectory, 'img_profile_pic_icon.jpg');
-	Alloy.Globals.globalUserSignUpData.profilePicture.icon.write(resizedImage);
+	Alloy.Globals.userSignUpData.profilePicture.icon.write(resizedImage);
 	
 	// Read and load the largeImage to the imageView
-	$.img_user.image = Alloy.Globals.globalUserSignUpData.profilePicture.large.read();
+	$.img_user.image = Alloy.Globals.userSignUpData.profilePicture.large.read();
 	$.img_user.height = 100;
 	$.img_user.width = Ti.UI.SIZE;
 }
@@ -78,11 +77,9 @@ function signUp()
 	var xhr = Ti.Network.createHTTPClient({
 		onload: function(e) {
 			Alloy.Globals.loading.hide();
-			var response = JSON.parse(this.responseText);
-			//this returns the pin of the user you should convert it to md5
-			alert(response.rows);
-			//this is to convert the pin to md5 to be able to search with it in the DB you should save it alloy.globals
-			//var pinInMd5=Titanium.Utils.md5HexDigest(response.rows);
+			var response = JSON.parse("User's Pin:\n" + this.responseText); // TODO: Just for testing
+			// Converting the user's pin to md5 and saving it into userSignUpData
+			Alloy.Globals.userSignUpData.pin = Titanium.Utils.md5HexDigest(response.rows);
 		},
 		onerror: function(e) {
 			Alloy.Globals.loading.hide();
@@ -91,11 +88,11 @@ function signUp()
 	});
 	xhr.open("POST", Alloy.Globals.apiUrl + "insert/bofff/user_accounts");
 	var params = {
-		fullName: Alloy.Globals.globalUserSignUpData.name,
-		gender: Alloy.Globals.globalUserSignUpData.gender,
-		primary_mobile:	Alloy.Globals.globalUserSignUpData.phone,
-		primary_email: Alloy.Globals.globalUserSignUpData.email,
-		profile_picture: Alloy.Globals.globalUserSignUpData.profilePicture.large ? Alloy.Globals.globalUserSignUpData.profilePicture.large.read() : null,
+		fullName: Alloy.Globals.userSignUpData.name,
+		gender: Alloy.Globals.userSignUpData.gender,
+		primary_mobile:	Alloy.Globals.userSignUpData.phone,
+		primary_email: Alloy.Globals.userSignUpData.email,
+		profile_picture: Alloy.Globals.userSignUpData.profilePicture.large ? Alloy.Globals.userSignUpData.profilePicture.large.read() : null,
 	};
 	xhr.send(params); // request is actually sent with this statement
 }
@@ -201,7 +198,7 @@ function genderSelected(e) {
 		$.lbl_gender_female.color = "gray";
 		$.img_gender_male.image = "/images/gender_male.png";
 		$.img_gender_female.image = "/images/gender_female[shaded].png";
-		Alloy.Globals.globalUserSignUpData.gender = "male";
+		Alloy.Globals.userSignUpData.gender = "male";
 	} else {
 		$.lbl_gender_male.font = { fontSize: "17" };
 		$.lbl_gender_female.font = { fontSize: "20" };;
@@ -209,7 +206,7 @@ function genderSelected(e) {
 		$.img_gender_female.image = "/images/gender_female.png";
 		$.lbl_gender_male.color = "gray";
 		$.lbl_gender_female.color = "#2279bc";
-		Alloy.Globals.globalUserSignUpData.gender = "female";
+		Alloy.Globals.userSignUpData.gender = "female";
 	}
 }
 
@@ -219,10 +216,6 @@ function continueBtnPressed() {
 		$.win.fireEvent('click');	// To blur keyboard
 		
 		Alloy.Globals.loading.show("Please Wait ..", false);
-		// signUp(); // TODO: For testing
-		
-		// Save the global sign up data to a file
-		var file = Ti.Filesystem.getFile(Ti.Filesystem.applicationDataDirectory, 'signUpData');
-		file.write(); // TODO: Not finished
+		signUp(); // TODO: For testing
 	}
 }
