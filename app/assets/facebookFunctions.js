@@ -13,6 +13,7 @@ function loginWithFacebook(atLoginSuccessFunction, nextFunctionData) {
 			if (e.success) {
 				atLoginSuccessFunction(nextFunctionData);
 				Ti.API.info("Facebook login completed !");
+				Alloy.Globals.loading.show("Please Wait ..", false); // Show loading view
 			} else if (e.error) {
 		        alert(e.error);
 		    } else if (e.cancelled) {
@@ -20,7 +21,10 @@ function loginWithFacebook(atLoginSuccessFunction, nextFunctionData) {
 		    }
 		});
 		facebook.authorize();
-	} else atLoginSuccessFunction(nextFunctionData);
+	} else {
+		atLoginSuccessFunction(nextFunctionData);
+		Alloy.Globals.loading.show("Please Wait ..", false); // Show loading view
+	}
 }
 
 
@@ -40,7 +44,7 @@ function requestWithGraphPath(nextFunctionData) {
 }
 
 function getNameEmailPicture(objectsToChange) {
-	Alloy.Globals.loading.show('Please Wait ..', false); // Showing Loading View
+	//Alloy.Globals.loading.show('Please Wait ..', false); // Showing Loading View
 	
 	Alloy.Globals.userSignUpData.name = facebookData.name;
 	Alloy.Globals.userSignUpData.email = facebookData.email;
@@ -80,10 +84,10 @@ function saveFbProfilePic(profilePicUrl, imgType) {
 				Alloy.Globals.userSignUpData.profilePicture.icon = image_file; 
 			} else if (imgType == 'large') {
 				Alloy.Globals.userSignUpData.profilePicture.large = image_file;
+				Alloy.Globals.loading.hide(); // Hide Loading View
 				// Fire the event that will set the UI with facebook data
 				// It's put here because it will display the large image
 				Ti.App.fireEvent('facebookFinished');
-				Alloy.Globals.loading.hide(); // Hide Loading View
 			}
 			Ti.API.info(imgType + " saved");
 		},

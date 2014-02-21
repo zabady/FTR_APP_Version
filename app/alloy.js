@@ -10,15 +10,15 @@
 //
 // Alloy.Globals.someGlobalFunction = function(){};
 
-// Check for internet connectivity
-if(!Ti.Network.online) {
-	Ti.UI.createAlertDialog({
-		title : 'No Internet Connection',
-		message : 'Please connect to the internet and restart the app.',
-		cancel : 0,
-		buttonNames : ['Ok']
-	}).show();
-}
+// // Check for internet connectivity
+// if(!Ti.Network.online) {
+	// Ti.UI.createAlertDialog({
+		// title : 'No Internet Connection',
+		// message : 'Please connect to the internet and restart the app.',
+		// cancel : 0,
+		// buttonNames : ['Ok']
+	// }).show();
+// }
 
 // Defining a global loading variable to access loading widget
 Alloy.Globals.loading = Alloy.createWidget("nl.fokkezb.loading");
@@ -52,7 +52,12 @@ var xhr = Ti.Network.createHTTPClient({
 		Alloy.Globals.countryCode = response[0].cc.toLowerCase();
 	},
 	onerror: function(e) {
-		alert("No Interner Connection.");
+		Ti.UI.createAlertDialog({
+			title : 'No Internet Connection',
+			message : 'Please connect to the internet and restart the app.',
+			cancel : 0,
+			buttonNames : ['Ok']
+		}).show();
 	},
 });
 xhr.open("POST", Alloy.Globals.apiUrl + "get_country_from_ip");

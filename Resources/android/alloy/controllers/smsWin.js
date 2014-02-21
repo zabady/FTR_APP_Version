@@ -122,7 +122,6 @@ function Controller() {
     var xhr = Ti.Network.createHTTPClient({
         onload: function() {
             var response = JSON.parse(this.responseText);
-            alert(response.rows);
             accessCode = response.rows;
         },
         onerror: function() {
@@ -136,7 +135,7 @@ function Controller() {
     });
     xhr.open("POST", Alloy.Globals.apiUrl + "send_code_msg");
     ({
-        mobile: Alloy.Globals.globalUserSignUpData.phone
+        mobile: Alloy.Globals.userSignUpData.phone
     });
     $.win.addEventListener("click", function() {
         $.txt_SMSCode.blur();

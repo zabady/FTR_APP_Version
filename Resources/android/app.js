@@ -6,12 +6,13 @@ Alloy.Globals.apiUrl = "http://www.bofffme.com/api/index.php/home/";
 
 Alloy.Globals.firstTimeRun = false;
 
-Alloy.Globals.globalUserSignUpData = new Object({
-    name: "Ahmed Atif",
-    phone: "201009091995",
-    email: "ahmed.atif15@gamil.com",
-    profilePicture: new Object(),
-    gender: "temp"
+Alloy.Globals.userSignUpData = new Object({
+    pin: "temp",
+    name: "temp",
+    phone: "temp",
+    email: "temp",
+    gender: "temp",
+    profilePicture: new Object()
 });
 
 var xhr = Ti.Network.createHTTPClient({
@@ -20,12 +21,7 @@ var xhr = Ti.Network.createHTTPClient({
         Alloy.Globals.countryCode = response[0].cc.toLowerCase();
     },
     onerror: function() {
-        Ti.UI.createAlertDialog({
-            title: "Error",
-            message: "Check your internet connection.",
-            cancel: 0,
-            buttonNames: [ "Ok" ]
-        }).show();
+        Ti.API.info("No Interner Connection.");
     }
 });
 

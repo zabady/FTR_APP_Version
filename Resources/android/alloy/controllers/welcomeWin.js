@@ -82,6 +82,12 @@ function Controller() {
     openPhoneNumberWin ? $.__views.__alloyId25.addEventListener("click", openPhoneNumberWin) : __defers["$.__views.__alloyId25!click!openPhoneNumberWin"] = true;
     exports.destroy = function() {};
     _.extend($, $.__views);
+    Ti.Network.networkType == Ti.Network.NETWORK_NONE && Ti.UI.createAlertDialog({
+        title: "No Internet Connection",
+        message: "Please connect to the internet and restart the app.",
+        cancel: 0,
+        buttonNames: [ "Ok" ]
+    }).show();
     $.win.navBarHidden = true;
     $.win.open();
     __defers["$.__views.__alloyId25!click!openPhoneNumberWin"] && $.__views.__alloyId25.addEventListener("click", openPhoneNumberWin);

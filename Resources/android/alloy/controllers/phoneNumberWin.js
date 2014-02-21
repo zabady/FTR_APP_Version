@@ -17,7 +17,7 @@ function Controller() {
     }
     function dialogConfirmPressed(e) {
         if (0 == e.index) $.txt_phoneNumber.focus(); else {
-            Alloy.Globals.globalUserSignUpData.phone = allCountries[currentCountryCode].phoneCode + parseInt($.txt_phoneNumber.value, 10);
+            Alloy.Globals.userSignUpData.phone = allCountries[currentCountryCode].phoneCode + parseInt($.txt_phoneNumber.value, 10);
             var smsWin = Alloy.createController("smsWin").getView();
             smsWin.open({
                 activityEnterAnimation: Ti.Android.R.anim.slide_in_left

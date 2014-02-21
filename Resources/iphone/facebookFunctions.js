@@ -1,9 +1,13 @@
 function loginWithFacebook(atLoginSuccessFunction, nextFunctionData) {
-    if (facebook.loggedIn) atLoginSuccessFunction(nextFunctionData); else {
+    if (facebook.loggedIn) {
+        atLoginSuccessFunction(nextFunctionData);
+        Alloy.Globals.loading.show("Please Wait ..", false);
+    } else {
         facebook.addEventListener("login", function(e) {
             if (e.success) {
                 atLoginSuccessFunction(nextFunctionData);
                 Ti.API.info("Facebook login completed !");
+                Alloy.Globals.loading.show("Please Wait ..", false);
             } else e.error ? alert(e.error) : e.cancelled && alert("Canceled");
         });
         facebook.authorize();
@@ -21,7 +25,6 @@ function requestWithGraphPath(nextFunctionData) {
 }
 
 function getNameEmailPicture() {
-    Alloy.Globals.loading.show("Please Wait ..", false);
     Alloy.Globals.userSignUpData.name = facebookData.name;
     Alloy.Globals.userSignUpData.email = facebookData.email;
     Alloy.Globals.userSignUpData.gender = facebookData.gender;
@@ -53,8 +56,8 @@ function saveFbProfilePic(profilePicUrl, imgType) {
             image_file.write(this.responseData);
             if ("icon" == imgType) Alloy.Globals.userSignUpData.profilePicture.icon = image_file; else if ("large" == imgType) {
                 Alloy.Globals.userSignUpData.profilePicture.large = image_file;
-                Ti.App.fireEvent("facebookFinished");
                 Alloy.Globals.loading.hide();
+                Ti.App.fireEvent("facebookFinished");
             }
             Ti.API.info(imgType + " saved");
         },

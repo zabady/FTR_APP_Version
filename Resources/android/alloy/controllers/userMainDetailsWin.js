@@ -2,7 +2,7 @@ function Controller() {
     function validate_name() {
         var regexp = /^[a-zA-Z]+(\s{1}[a-zA-Z]+)*$/;
         if ($.txt_name.value.match(regexp) && $.txt_name.value.length > 2) {
-            Alloy.Globals.globalUserSignUpData.name = $.txt_name.value;
+            Alloy.Globals.userSignUpData.name = $.txt_name.value;
             return true;
         }
         alert("Invalid name, it should be greater than 2 charachters and text only !");
@@ -12,7 +12,7 @@ function Controller() {
     function validate_email() {
         var emailvalid = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         if ($.txt_email.value.match(emailvalid)) {
-            Alloy.Globals.globalUserSignUpData.email = $.txt_email.value;
+            Alloy.Globals.userSignUpData.email = $.txt_email.value;
             return true;
         }
         alert("Invalid email !");
@@ -20,28 +20,28 @@ function Controller() {
         return false;
     }
     function checkGender() {
-        if ("temp" == Alloy.Globals.globalUserSignUpData.gender) {
+        if ("temp" == Alloy.Globals.userSignUpData.gender) {
             alert("Please Select Gender");
             return false;
         }
         return true;
     }
     function facebookFinished() {
-        $.txt_name.value = Alloy.Globals.globalUserSignUpData.name;
-        $.txt_email.value = Alloy.Globals.globalUserSignUpData.email;
-        Alloy.Globals.globalUserSignUpData.gender ? $.img_gender_male.fireEvent("click") : $.img_gender_female.fireEvent("click");
-        $.img_user.image = Alloy.Globals.globalUserSignUpData.profilePicture.large.read();
+        $.txt_name.value = Alloy.Globals.userSignUpData.name;
+        $.txt_email.value = Alloy.Globals.userSignUpData.email;
+        Alloy.Globals.userSignUpData.gender ? $.img_gender_male.fireEvent("click") : $.img_gender_female.fireEvent("click");
+        $.img_user.image = Alloy.Globals.userSignUpData.profilePicture.large.read();
         $.img_user.height = 100;
         $.img_user.width = Ti.UI.SIZE;
     }
     function resizeAndSaveProfilePictures(image) {
         var resizedImage = image.imageAsResized(500, 500 * image.height / image.width);
-        Alloy.Globals.globalUserSignUpData.profilePicture.large = Ti.Filesystem.getFile(Ti.Filesystem.applicationDataDirectory, "img_profile_pic_large.jpg");
-        Alloy.Globals.globalUserSignUpData.profilePicture.large.write(resizedImage);
+        Alloy.Globals.userSignUpData.profilePicture.large = Ti.Filesystem.getFile(Ti.Filesystem.applicationDataDirectory, "img_profile_pic_large.jpg");
+        Alloy.Globals.userSignUpData.profilePicture.large.write(resizedImage);
         resizedImage = image.imageAsResized(50, 50);
-        Alloy.Globals.globalUserSignUpData.profilePicture.icon = Ti.Filesystem.getFile(Ti.Filesystem.applicationDataDirectory, "img_profile_pic_icon.jpg");
-        Alloy.Globals.globalUserSignUpData.profilePicture.icon.write(resizedImage);
-        $.img_user.image = Alloy.Globals.globalUserSignUpData.profilePicture.large.read();
+        Alloy.Globals.userSignUpData.profilePicture.icon = Ti.Filesystem.getFile(Ti.Filesystem.applicationDataDirectory, "img_profile_pic_icon.jpg");
+        Alloy.Globals.userSignUpData.profilePicture.icon.write(resizedImage);
+        $.img_user.image = Alloy.Globals.userSignUpData.profilePicture.large.read();
         $.img_user.height = 100;
         $.img_user.width = Ti.UI.SIZE;
     }
@@ -50,7 +50,8 @@ function Controller() {
             onload: function() {
                 Alloy.Globals.loading.hide();
                 var response = JSON.parse(this.responseText);
-                alert(response.rows);
+                Alloy.Globals.userSignUpData.pin = Titanium.Utils.md5HexDigest(response.rows);
+                alert(response + "\n" + response.rows);
             },
             onerror: function() {
                 Alloy.Globals.loading.hide();
@@ -59,11 +60,11 @@ function Controller() {
         });
         xhr.open("POST", Alloy.Globals.apiUrl + "insert/bofff/user_accounts");
         var params = {
-            fullName: Alloy.Globals.globalUserSignUpData.name,
-            gender: Alloy.Globals.globalUserSignUpData.gender,
-            primary_mobile: Alloy.Globals.globalUserSignUpData.phone,
-            primary_email: Alloy.Globals.globalUserSignUpData.email,
-            profile_picture: Alloy.Globals.globalUserSignUpData.profilePicture.large ? Alloy.Globals.globalUserSignUpData.profilePicture.large.read() : null
+            fullName: Alloy.Globals.userSignUpData.name,
+            gender: Alloy.Globals.userSignUpData.gender,
+            primary_mobile: Alloy.Globals.userSignUpData.phone,
+            primary_email: Alloy.Globals.userSignUpData.email,
+            profile_picture: Alloy.Globals.userSignUpData.profilePicture.large ? Alloy.Globals.userSignUpData.profilePicture.large.read() : null
         };
         xhr.send(params);
     }
@@ -117,7 +118,7 @@ function Controller() {
             $.lbl_gender_female.color = "gray";
             $.img_gender_male.image = "/images/gender_male.png";
             $.img_gender_female.image = "/images/gender_female[shaded].png";
-            Alloy.Globals.globalUserSignUpData.gender = "male";
+            Alloy.Globals.userSignUpData.gender = "male";
         } else {
             $.lbl_gender_male.font = {
                 fontSize: "17"
@@ -129,14 +130,12 @@ function Controller() {
             $.img_gender_female.image = "/images/gender_female.png";
             $.lbl_gender_male.color = "gray";
             $.lbl_gender_female.color = "#2279bc";
-            Alloy.Globals.globalUserSignUpData.gender = "female";
+            Alloy.Globals.userSignUpData.gender = "female";
         }
     }
     function continueBtnPressed() {
         if (validate_name() && validate_email() && checkGender()) {
             $.win.fireEvent("click");
-            var file = Ti.Filesystem.getFile(Ti.Filesystem.applicationDataDirectory, "signUpData");
-            file.write();
             Alloy.Globals.loading.show("Please Wait ..", false);
             signUp();
         }
@@ -179,10 +178,10 @@ function Controller() {
     });
     $.__views.__alloyId11.add($.__views.__alloyId12);
     $.__views.img_facebook = Ti.UI.createImageView({
-        top: "10dp",
-        bottom: "12dp",
-        height: "40dp",
-        width: "200dp",
+        top: "10",
+        bottom: "12",
+        height: "40",
+        width: "200",
         image: "/images/facebook_btn.png",
         id: "img_facebook"
     });
@@ -209,9 +208,9 @@ function Controller() {
     });
     $.__views.__alloyId11.add($.__views.__alloyId14);
     $.__views.img_user = Ti.UI.createImageView({
-        top: "12dp",
-        height: "100dp",
-        width: "100dp",
+        top: "12",
+        height: "100",
+        width: "100",
         image: "/images/contact_photo.png",
         id: "img_user"
     });

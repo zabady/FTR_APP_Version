@@ -1,12 +1,5 @@
 var Alloy = require("alloy"), _ = Alloy._, Backbone = Alloy.Backbone;
 
-Ti.Network.online || Ti.UI.createAlertDialog({
-    title: "No Internet Connection",
-    message: "Please connect to the internet and restart the app.",
-    cancel: 0,
-    buttonNames: [ "Ok" ]
-}).show();
-
 Alloy.Globals.loading = Alloy.createWidget("nl.fokkezb.loading");
 
 Alloy.Globals.mainNav = new Object();
@@ -30,7 +23,12 @@ var xhr = Ti.Network.createHTTPClient({
         Alloy.Globals.countryCode = response[0].cc.toLowerCase();
     },
     onerror: function() {
-        alert("No Interner Connection.");
+        Ti.UI.createAlertDialog({
+            title: "No Internet Connection",
+            message: "Please connect to the internet and restart the app.",
+            cancel: 0,
+            buttonNames: [ "Ok" ]
+        }).show();
     }
 });
 

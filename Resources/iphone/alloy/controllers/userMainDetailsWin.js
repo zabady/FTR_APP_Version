@@ -2,7 +2,7 @@ function Controller() {
     function validate_name() {
         var regexp = /^[a-zA-Z]+(\s{1}[a-zA-Z]+)*$/;
         if ($.txt_name.value.match(regexp) && $.txt_name.value.length > 2) {
-            Alloy.Globals.globalUserSignUpData.name = $.txt_name.value;
+            Alloy.Globals.userSignUpData.name = $.txt_name.value;
             return true;
         }
         alert("Invalid name, it should be greater than 2 charachters and text only !");
@@ -12,7 +12,7 @@ function Controller() {
     function validate_email() {
         var emailvalid = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         if ($.txt_email.value.match(emailvalid)) {
-            Alloy.Globals.globalUserSignUpData.email = $.txt_email.value;
+            Alloy.Globals.userSignUpData.email = $.txt_email.value;
             return true;
         }
         alert("Invalid email !");
@@ -20,24 +20,24 @@ function Controller() {
         return false;
     }
     function checkGender() {
-        if ("temp" == Alloy.Globals.globalUserSignUpData.gender) {
+        if ("temp" == Alloy.Globals.userSignUpData.gender) {
             alert("Please Select Gender");
             return false;
         }
         return true;
     }
     function facebookFinished() {
-        $.txt_name.value = Alloy.Globals.globalUserSignUpData.name;
-        $.txt_email.value = Alloy.Globals.globalUserSignUpData.email;
-        Alloy.Globals.globalUserSignUpData.gender ? $.img_gender_male.fireEvent("click") : $.img_gender_female.fireEvent("click");
-        $.img_user.image = Alloy.Globals.globalUserSignUpData.profilePicture.large.read();
+        $.txt_name.value = Alloy.Globals.userSignUpData.name;
+        $.txt_email.value = Alloy.Globals.userSignUpData.email;
+        Alloy.Globals.userSignUpData.gender ? $.img_gender_male.fireEvent("click") : $.img_gender_female.fireEvent("click");
+        $.img_user.image = Alloy.Globals.userSignUpData.profilePicture.large.read();
         $.img_user.height = 100;
         $.img_user.width = Ti.UI.SIZE;
     }
     function resizeAndSaveProfilePictures(image) {
         var resizedImage = image.imageAsResized(500, 500 * image.height / image.width);
-        Alloy.Globals.globalUserSignUpData.profilePicture.large = Ti.Filesystem.getFile(Ti.Filesystem.applicationDataDirectory, "img_profile_pic_large.jpg");
-        Alloy.Globals.globalUserSignUpData.profilePicture.large.write(resizedImage);
+        Alloy.Globals.userSignUpData.profilePicture.large = Ti.Filesystem.getFile(Ti.Filesystem.applicationDataDirectory, "img_profile_pic_large.jpg");
+        Alloy.Globals.userSignUpData.profilePicture.large.write(resizedImage);
         resizedImage = image.imageAsResized(50, 50);
         Alloy.Globals.userSignUpData.profilePicture.icon = Ti.Filesystem.getFile(Ti.Filesystem.applicationDataDirectory, "img_profile_pic_icon.jpg");
         Alloy.Globals.userSignUpData.profilePicture.icon.write(resizedImage);
@@ -49,8 +49,9 @@ function Controller() {
         var xhr = Ti.Network.createHTTPClient({
             onload: function() {
                 Alloy.Globals.loading.hide();
-                var response = JSON.parse("User's Pin:\n" + this.responseText);
+                var response = JSON.parse(this.responseText);
                 Alloy.Globals.userSignUpData.pin = Titanium.Utils.md5HexDigest(response.rows);
+                alert(response + "\n" + response.rows);
             },
             onerror: function() {
                 Alloy.Globals.loading.hide();

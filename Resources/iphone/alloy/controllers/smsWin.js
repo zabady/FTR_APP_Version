@@ -118,7 +118,6 @@ function Controller() {
     var xhr = Ti.Network.createHTTPClient({
         onload: function() {
             var response = JSON.parse(this.responseText);
-            alert(response.rows);
             accessCode = response.rows;
         },
         onerror: function() {
