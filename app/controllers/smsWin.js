@@ -22,7 +22,7 @@ var msgParams = {
 	mobile: Alloy.Globals.userSignUpData.phone,
 };
 // Send the request to the server
-// xhr.send(msgParams); // TODO: For testing
+xhr.send(msgParams); // TODO: For testing
 
 
 /////////////////////////////////////////////////////////////////////////// HANDLING UI AND EVENT LISTENERS FUNCTIONS

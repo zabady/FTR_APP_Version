@@ -10,16 +10,6 @@
 //
 // Alloy.Globals.someGlobalFunction = function(){};
 
-// // Check for internet connectivity
-// if(!Ti.Network.online) {
-	// Ti.UI.createAlertDialog({
-		// title : 'No Internet Connection',
-		// message : 'Please connect to the internet and restart the app.',
-		// cancel : 0,
-		// buttonNames : ['Ok']
-	// }).show();
-// }
-
 // Defining a global loading variable to access loading widget
 Alloy.Globals.loading = Alloy.createWidget("nl.fokkezb.loading");
 
